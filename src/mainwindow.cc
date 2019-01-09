@@ -6,6 +6,7 @@ class Recalculate: public QThread {
 public:
   void run() {
     fromHere("running thread");
+    recalculate();
   };
 } _rec;
 
