@@ -1,5 +1,5 @@
-#ifndef INC_eFmd6v1j1da
-#define INC_eFmd6v1j1da
+#ifndef INC_9HgOiSh7GE7
+#define INC_9HgOiSh7GE7
 
 #include <unistd.h>
 #include <stdio.h>
@@ -12,4 +12,5 @@
 #include <timerecord.hh>
 
 #define fromHere(msg) printf("%s:%d: %s\n",__FILE__,__LINE__,msg)
+
 #endif

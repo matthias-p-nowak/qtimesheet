@@ -37,14 +37,15 @@ void MainWindow::initialize() {
   fileMenu->addSeparator();
   fileMenu->addAction("&Quit",this,&MainWindow::closeMain,QKeySequence("Ctrl+Q"));
 
-  auto projMenu = menuBar()->addMenu("&Projects");
-  projMenu->addAction("&New one",this,&MainWindow::newProject);
-  projMenu->addSeparator();
+  projMenu = menuBar()->addMenu("&Projects");
+
 
   if(QSystemTrayIcon::isSystemTrayAvailable()) {
     fromHere("setting tray icon");
     trayIcon=new QSystemTrayIcon(icon,this);
     trayIcon->show();
+    auto cm=new QMenu(this);
+    trayIcon->setContextMenu(cm);
     connect(trayIcon,&QSystemTrayIcon::activated,this,&MainWindow::sysTrayMenuActivated);
   }
   connect(&_rec,&QThread::finished,this,&MainWindow::updateResults);
@@ -57,7 +58,11 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::sysTrayMenuActivated(QSystemTrayIcon::ActivationReason reason) {
-  show();
+  switch(reason) {
+  case QSystemTrayIcon::Trigger:
+    show();
+    break;
+  }
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
@@ -105,6 +110,8 @@ void MainWindow::newProject(bool _ignored) {
 }
 
 void MainWindow::readRecordsFromFile() {
+  for(auto r:records)
+    delete r;
   records.clear();
   QSettings settings(this);
   auto fn=settings.value("file").toString();
@@ -117,18 +124,49 @@ void MainWindow::readRecordsFromFile() {
 }
 
 void MainWindow::writeRecordsToFile() {
-    QSettings settings(this);
-    auto fn=settings.value("file").toString();
-    qDebug() << "record file "<<fn;
-    QFile f(fn);
-    f.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream ts(&f);
-    writeRecords(ts);
-    ts.flush();
+  QSettings settings(this);
+  auto fn=settings.value("file").toString();
+  qDebug() << "record file "<<fn;
+  QFile f(fn);
+  f.open(QIODevice::WriteOnly | QIODevice::Text);
+  QTextStream ts(&f);
+  writeRecords(ts);
+  ts.flush();
 }
 
-void MainWindow::updateResults(){
+void MainWindow::updateProjects() {
+  projectNames.clear();
+  QSet<QString> gotSoFar;
+
+  projMenu->clear();
+  projMenu->addAction("&New one",this,&MainWindow::newProject);
+  projMenu->addSeparator();
+
+  auto cm=trayIcon->contextMenu();
+  cm->clear();
+
+  for(auto r: records) {
+    if(!gotSoFar.contains(r->project)) {
+      gotSoFar.insert(r->project);
+      projectNames << r->project;
+      projMenu->addAction(r->project,this, &MainWindow::nextProject);
+      cm->addAction(r->project,this, &MainWindow::nextProject);
+    }
+  }
+}
+
+void MainWindow::nextProject(bool _ignored) {
+  QAction *pA=qobject_cast<QAction *>(sender());
+  auto now = QDateTime::currentDateTime();
+  auto name=pA->text();
+  auto tr=new TimeRecord(now, name);
+  records.push_back(tr);
+  _rec.start();
+}
+
+void MainWindow::updateResults() {
   fromHere("writing to files");
   writeRecordsToFile();
+  updateProjects();
 }
 

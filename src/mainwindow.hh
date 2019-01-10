@@ -1,5 +1,5 @@
-#ifndef INC_IZ0RSEfv698
-#define INC_IZ0RSEfv698
+#ifndef INC_6XBESwi7bDi
+#define INC_6XBESwi7bDi
 
 #include <QMainWindow>
 #include <QSettings>
@@ -9,6 +9,7 @@
 #include <QTimer>
 #include <QFileDialog>
 #include <QInputDialog>
+#include <QSet>
 
 
 class MainWindow: public QMainWindow {
@@ -18,6 +19,9 @@ private:
   QSystemTrayIcon *trayIcon;
   void readRecordsFromFile();
   void writeRecordsToFile();
+  QStringList projectNames;
+  void updateProjects();
+  QMenu *projMenu;
   
 public:
   ~MainWindow();
@@ -27,6 +31,7 @@ public:
   void openFile(bool _ignored);
   void newProject(bool _ignored);
   void updateResults();
+  void nextProject(bool _ignored);
 
 public slots:
   void closeEvent(QCloseEvent *event);
