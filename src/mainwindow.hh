@@ -10,6 +10,8 @@
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QSet>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 
 
 class MainWindow: public QMainWindow {
@@ -22,6 +24,7 @@ private:
   QStringList projectNames;
   void updateProjects();
   QMenu *projMenu;
+  QTreeWidget *tree;
   
 public:
   ~MainWindow();

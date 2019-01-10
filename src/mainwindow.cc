@@ -32,6 +32,13 @@ void MainWindow::initialize() {
   QIcon icon(":/Sandwatch.png");
   setWindowIcon(icon);
 
+  tree=new QTreeWidget(this);
+  setCentralWidget(tree);
+  tree->setColumnCount(8);
+  QStringList sl;
+  sl << "week/project"<<"Man"<<"Tue"<<"Wed"<<"Thu"<<"Fri"<<"Sat"<<"Sun";
+  tree->setHeaderLabels(sl);
+
   auto fileMenu = menuBar()->addMenu("&File");
   fileMenu->addAction("&Open",this,&MainWindow::openFile,QKeySequence("Ctrl+O"));
   fileMenu->addSeparator();
@@ -137,14 +144,11 @@ void MainWindow::writeRecordsToFile() {
 void MainWindow::updateProjects() {
   projectNames.clear();
   QSet<QString> gotSoFar;
-
   projMenu->clear();
   projMenu->addAction("&New one",this,&MainWindow::newProject);
   projMenu->addSeparator();
-
   auto cm=trayIcon->contextMenu();
   cm->clear();
-
   for(auto r: records) {
     if(!gotSoFar.contains(r->project)) {
       gotSoFar.insert(r->project);
@@ -160,6 +164,8 @@ void MainWindow::nextProject(bool _ignored) {
   auto now = QDateTime::currentDateTime();
   auto name=pA->text();
   auto tr=new TimeRecord(now, name);
+  auto title=QString("%1 [%2]").arg(qApp->applicationName()).arg(name);
+  setWindowTitle(title);
   records.push_back(tr);
   _rec.start();
 }
@@ -168,5 +174,29 @@ void MainWindow::updateResults() {
   fromHere("writing to files");
   writeRecordsToFile();
   updateProjects();
+  tree->clear();
+  int w=0;
+  for(int wn: weekNumbers){
+    QStringList sl;
+    sl <<QString::number(wn);
+    auto ti=new QTreeWidgetItem(sl);
+    tree->addTopLevelItem(ti);
+    auto entries=timeOverview[wn];
+    for(QString &prj: entries.keys()){
+      if(prj.isEmpty())
+	continue;
+      TimeOverview &ov=entries[prj];
+      sl.clear();
+      sl << prj;
+      for(int i=0;i<7;++i)
+	sl<< QString::number(ov.hours[i]);
+	auto tr=new QTreeWidgetItem(ti,sl);
+    }
+  }
+  auto ti=tree->topLevelItem(0);
+  if(ti)
+    ti->setExpanded(true);
+  for(int i=0;i<8;++i)
+  tree->resizeColumnToContents(i);
 }
 

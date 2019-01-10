@@ -7,6 +7,7 @@
 #include <vector>
 #include <QTextStream>
 #include <math.h>
+#include <QMap>
 
 class TimeRecord {
 public:
@@ -18,6 +19,16 @@ public:
   int billed; // half hours billed
   static TimeRecord * read(QString &line);
 };
+
+class TimeOverview {
+  public:
+  TimeOverview();
+  int weekNumber;
+  float hours[7];
+};
+
+extern QMap<int,QMap<QString,TimeOverview>> timeOverview;
+extern QList<int> weekNumbers;
 
 const float scale_up=16.0/15.0;  // 8 hours for 7.5 actual work
 

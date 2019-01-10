@@ -5,6 +5,8 @@
 using namespace std;
 
 vector<TimeRecord *> records;
+QMap<int,QMap<QString,TimeOverview>> timeOverview;
+QList<int> weekNumbers;
 
 TimeRecord::TimeRecord(QDateTime &_start, QString &_proj):
   start(_start),project(_proj)
@@ -80,4 +82,28 @@ void recalculate() {
       break;
     }
   }
+  timeOverview.clear();
+  weekNumbers.clear();
+  for(int i=0; i<sz; ++i) {
+    TimeRecord* tr=records[i];
+    if(tr->billed<=0)
+      continue;
+    auto day=tr->start.date();
+    int wn=day.weekNumber();
+    auto prjs=timeOverview[wn];
+    if(prjs.isEmpty()){
+      qDebug()<< QString("appending week %1").arg(wn);
+      weekNumbers.append(wn);
+    }
+    auto rec=prjs[tr->project];
+    rec.weekNumber=wn;
+    rec.hours[day.dayOfWeek()-1]=tr->billed/2.0;
+    prjs[tr->project]=rec;
+    timeOverview[wn]=prjs;
+  }
+}
+
+TimeOverview::TimeOverview() {
+  for(int i=0; i<7; ++i)
+    hours[i]=0;
 }
