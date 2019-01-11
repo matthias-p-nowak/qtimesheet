@@ -28,21 +28,14 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
-FILE_NAME_0=0;CMake;0;EUTF-8;2;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2FCMakeLists.txt;0;2
-FILE_NAME_1=378;CMake;0;EUTF-8;2;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2FCMakeLists.txt;0;2
-FILE_NAME_2=26;C++;0;EUTF-8;2;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Fqtimesheet.cc;0;2
+current_page=2
+FILE_NAME_0=176;C++;0;EUTF-8;2;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Fqtimesheet.hh;0;2
+FILE_NAME_1=2962;C++;0;EUTF-8;2;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Fmainwindow.cc;0;2
+FILE_NAME_2=2472;C++;0;EUTF-8;0;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Ftimerecord.cc;0;2
+FILE_NAME_3=223;None;0;EUTF-8;2;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fbuild%2Ftt2.txt;0;2
 
 [VTE]
 last_dir=/home/me/projects/qtimesheet/src
-
-[debugger]
-target=
-debugger=
-arguments=
-envvar_count=0
-watches_count=0
-breaks_count=0
 
 [build-menu]
 NF_00_LB=_Make
@@ -52,3 +45,25 @@ CMakeFT_00_LB=cmake
 CMakeFT_00_CM=cmake -Bbuild -H. -GNinja
 CMakeFT_00_WD=%p
 filetypes=CMake;
+EX_00_LB=_Execute
+EX_00_CM=./qtimesheet
+EX_00_WD=%pbuild
+
+[debugger]
+target=/home/me/projects/qtimesheet/build/qtimesheet
+debugger=GDB
+arguments=
+envvar_count=0
+watches_count=1
+watch_0=records
+breaks_count=2
+break_0_file=/home/me/projects/qtimesheet/src/timerecord.cc
+break_0_line=65
+break_0_condition=
+break_0_hits_count=0
+break_0_enabled=true
+break_1_file=/home/me/projects/qtimesheet/src/timerecord.cc
+break_1_line=87
+break_1_condition=
+break_1_hits_count=0
+break_1_enabled=true
