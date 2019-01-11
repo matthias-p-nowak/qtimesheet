@@ -1,7 +1,7 @@
 #ifndef INC_9HgOiSh7GE7
 #define INC_9HgOiSh7GE7
 
-#include <unistd.h>
+// #include <unistd.h>
 #include <stdio.h>
 
 #include <QApplication>
