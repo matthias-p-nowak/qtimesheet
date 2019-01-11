@@ -10,13 +10,19 @@ include_directories(.)
 qt5_add_resources(QRCS qts.qrc)
 # qt5_wrap_cpp(MOCS mainwindow.hh)
 
-if(MSVC)
-  set_target_properties(${_target} PROPERTIES WIN32_EXECUTABLE TRUE)
-endif()
 
 add_executable(${_target} ${_target}.cc mainwindow.cc timerecord.cc ${QRCS} ${MOCS})
 add_precompiled_header(${_target} ${_target}.hh HDRS mainwindow.hh timerecord.hh)
 qt5_use_modules(${_target} Widgets)
+
+if(MSVC)
+  set_target_properties(${_target} PROPERTIES WIN32_EXECUTABLE TRUE)
+  add_custom_command(TARGET ${_target} POST_BUILD
+  COMMAND windeployqt.exe ${_target}
+  WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+  USES_TERMINAL
+  )
+endif()
 
 #add_custom_command(TARGET ${_target} POST_BUILD
   #COMMAND ${_target}
