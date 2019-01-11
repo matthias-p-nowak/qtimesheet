@@ -51,13 +51,16 @@ void writeRecords(QTextStream &ts) {
 }
 
 int readRecords(QTextStream &ts) {
+  int recs=0;
   while(! ts.atEnd()) {
     auto line=ts.readLine();
     if(!line.isEmpty()) {
       auto tr=TimeRecord::read(line);
       records.push_back(tr);
+      ++recs;
     }
   }
+  return recs;
 }
 
 void recalculate() {
