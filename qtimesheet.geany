@@ -30,10 +30,9 @@ long_line_column=72
 [files]
 current_page=2
 FILE_NAME_0=176;C++;0;EUTF-8;2;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Fqtimesheet.hh;0;2
-FILE_NAME_1=257;C++;0;EUTF-8;2;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Fmainwindow.hh;0;2
-FILE_NAME_2=1365;C++;0;EUTF-8;2;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Fmainwindow.cc;0;2
-FILE_NAME_3=808;C++;0;EUTF-8;0;1;1;%2Fhome%2Fme%2Fprojects%2FWh_t_b__rd%2Fplugins%2Fworkbench%2Fmainwindow.hh;0;2
-FILE_NAME_4=1397;C++;0;EUTF-8;0;1;1;%2Fhome%2Fme%2Fprojects%2FWh_t_b__rd%2Fplugins%2Fworkbench%2Fmainwindow.cc;0;2
+FILE_NAME_1=2962;C++;0;EUTF-8;2;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Fmainwindow.cc;0;2
+FILE_NAME_2=2472;C++;0;EUTF-8;0;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Ftimerecord.cc;0;2
+FILE_NAME_3=223;None;0;EUTF-8;2;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fbuild%2Ftt2.txt;0;2
 
 [VTE]
 last_dir=/home/me/projects/qtimesheet/src
@@ -57,4 +56,14 @@ arguments=
 envvar_count=0
 watches_count=1
 watch_0=records
-breaks_count=0
+breaks_count=2
+break_0_file=/home/me/projects/qtimesheet/src/timerecord.cc
+break_0_line=65
+break_0_condition=
+break_0_hits_count=0
+break_0_enabled=true
+break_1_file=/home/me/projects/qtimesheet/src/timerecord.cc
+break_1_line=87
+break_1_condition=
+break_1_hits_count=0
+break_1_enabled=true

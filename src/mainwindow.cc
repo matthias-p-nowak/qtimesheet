@@ -176,27 +176,43 @@ void MainWindow::updateResults() {
   updateProjects();
   tree->clear();
   int w=0;
-  for(int wn: weekNumbers){
+  for(int wn: weekNumbers) {
+    if(++w>6)
+      break;
     QStringList sl;
     sl <<QString::number(wn);
     auto ti=new QTreeWidgetItem(sl);
     tree->addTopLevelItem(ti);
     auto entries=timeOverview[wn];
-    for(QString &prj: entries.keys()){
+    TimeOverview weekSum;
+    float ws=0;
+    for(QString &prj: entries.keys()) {
       if(prj.isEmpty())
-	continue;
+        continue;
       TimeOverview &ov=entries[prj];
       sl.clear();
       sl << prj;
-      for(int i=0;i<7;++i)
-	sl<< QString::number(ov.hours[i]);
-	auto tr=new QTreeWidgetItem(ti,sl);
+      for(int i=0; i<7; ++i) {
+        if(ov.hours[i]>0)
+          sl<< QString::number(ov.hours[i]);
+        else
+          sl << "";
+        weekSum.hours[i]+=ov.hours[i];
+        ws+=ov.hours[i];
+      }
+      auto tr=new QTreeWidgetItem(ti,sl);
     }
+    sl.clear();
+    sl << QString("sum: %1").arg(ws);
+    for(int i=0; i<7; ++i) {
+      sl << QString::number(weekSum.hours[i]);
+    }
+    auto tr=new QTreeWidgetItem(ti,sl);
   }
   auto ti=tree->topLevelItem(0);
   if(ti)
     ti->setExpanded(true);
-  for(int i=0;i<8;++i)
-  tree->resizeColumnToContents(i);
+  for(int i=0; i<8; ++i)
+    tree->resizeColumnToContents(i);
 }
 

@@ -1,6 +1,7 @@
 #include <qtimesheet.hh>
 
 #define DATEFORMAT "yyyy:MM:dd:HH:mm:ss"
+#define DATEFORMAT2 "yyyyMMddHHmmss"
 
 using namespace std;
 
@@ -19,6 +20,9 @@ TimeRecord::TimeRecord(QDateTime &_start, QString &_proj):
 TimeRecord * TimeRecord::read(QString &l) {
   auto parts=l.split(" ");
   auto start=QDateTime::fromString(parts[0],DATEFORMAT);
+  if(!start.isValid()){
+    start=QDateTime::fromString(parts[0],DATEFORMAT2);
+  }
   if(parts.size()<2) {
     QString n("");
     return new TimeRecord(start,n);
@@ -57,10 +61,22 @@ int readRecords(QTextStream &ts) {
 }
 
 void recalculate() {
-  int sz=records.size()-1;
+  // QTextStream ts(stdout);
+  int sz=records.size();
   for(int i=0; i<sz; ++i) {
     TimeRecord* tr=records[i];
+    if(i+1<sz){
     tr->worked=tr->start.secsTo(records[i+1]->start);
+    // ts<< tr->start.toString(DATEFORMAT) << "->" << records[i+1]->start.toString(DATEFORMAT) << "="<<tr->worked << "\n";
+  }
+    else{
+      auto now = QDateTime::currentDateTime();
+      tr->worked=tr->start.secsTo(now);
+      tr->billed=0;
+      tr->remaining=0;
+      // ts << "working until now \n";
+    }
+    // ts << tr->start.toString(DATEFORMAT) << " "<< tr->project << " worked "<< tr->worked << "\n";
     for(int j=i-1; j>=0; --j) {
       TimeRecord* tr2=records[j];
       if(tr->project != tr2->project)
@@ -68,19 +84,24 @@ void recalculate() {
       // found last
       // new remaining = last remaining + worked
       tr->remaining=tr2->remaining+tr->worked;
+      // ts << "new remaining is " << tr->remaining << "\n";
       // test if day is the same
       QDate d=tr->start.date();
       QDate d2=tr2->start.date();
       if(d==d2) {
-        tr->remaining+= 1800*tr2->billed;
+        tr->remaining+= 1800.0*tr2->billed;
         tr2->billed=0;
-      }
-      if(tr->remaining>0) {
-        tr->billed=ceil(tr->remaining/1800.0);
-        tr->remaining -= tr->billed*1800;
       }
       break;
     }
+     if(tr->remaining>0) {
+        tr->billed=ceil(tr->remaining/1800.0);
+        tr->remaining -= tr->billed*1800;
+      }else
+      {
+        tr->billed=0;
+      }
+      // ts << "billed "<< tr->billed << " remaining "<< tr->remaining << "\n";
   }
   timeOverview.clear();
   weekNumbers.clear();
