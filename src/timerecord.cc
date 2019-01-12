@@ -65,7 +65,7 @@ int readRecords(QTextStream &ts) {
 
 void recalculate() {
   // QTextStream ts(stdout);
-  int sz=records.size();
+  int sz=(int) records.size();
   for(int i=0; i<sz; ++i) {
     TimeRecord* tr=records[i];
     if(i+1<sz){
