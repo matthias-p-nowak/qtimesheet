@@ -11,13 +11,8 @@ qt5_add_resources(QRCS qts.qrc)
 # qt5_wrap_cpp(MOCS mainwindow.hh)
 if(WIN32)
 	set(_RCFILE appicon.rc)
-	find_file(_lib NAMES  ucrtbased.dll PATHS "C:\\windows\\system32")
-	message("lib is ${_lib}")
-	file(COPY ${_lib} DESTINATION  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-	set(_lib )
-	find_file(_lib2 NAMES  ucrtbase.dll PATHS "C:\\windows\\system32")
-	message("lib is ${_lib2}")
-	file(COPY ${_lib2} DESTINATION  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+	file(GLOB _lib2 /Windows/System32/ucrtbase*.dll) 
+	message("_lib2 is ${_lib2}")
 endif()
 
 add_executable(${_target} ${_target}.cc mainwindow.cc timerecord.cc ${QRCS} ${MOCS} ${_RCFILE})
@@ -36,6 +31,7 @@ if(WIN32)
  add_custom_target(${_target}_install ALL
 	DEPENDS ${_target} ${_NSIS_SRC}
 	WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+	COMMAND cmake -E copy ${_lib2} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 	COMMAND ${_NSIS} /NOCD /V4 ${_NSIS_SRC}
 	 USES_TERMINAL
  )
