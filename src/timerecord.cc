@@ -20,7 +20,7 @@ TimeRecord::TimeRecord(QDateTime &_start, QString &_proj):
 TimeRecord * TimeRecord::read(QString &l) {
   auto parts=l.split(" ");
   auto start=QDateTime::fromString(parts[0],DATEFORMAT);
-  if(!start.isValid()){
+  if(!start.isValid()) {
     start=QDateTime::fromString(parts[0],DATEFORMAT2);
   }
   if(parts.size()<2) {
@@ -68,17 +68,18 @@ void recalculate() {
   int sz=(int) records.size();
   for(int i=0; i<sz; ++i) {
     TimeRecord* tr=records[i];
-    if(i+1<sz){
-    tr->worked=tr->start.secsTo(records[i+1]->start);
-    // ts<< tr->start.toString(DATEFORMAT) << "->" << records[i+1]->start.toString(DATEFORMAT) << "="<<tr->worked << "\n";
-  }
-    else{
+    if(i+1<sz) {
+      tr->worked=tr->start.secsTo(records[i+1]->start);
+      // ts<< tr->start.toString(DATEFORMAT) << "->" << records[i+1]->start.toString(DATEFORMAT) << "="<<tr->worked << "\n";
+    }
+    else {
       auto now = QDateTime::currentDateTime();
       tr->worked=tr->start.secsTo(now);
       tr->billed=0;
       tr->remaining=0;
       // ts << "working until now \n";
     }
+    tr->worked*=scale_up;
     // ts << tr->start.toString(DATEFORMAT) << " "<< tr->project << " worked "<< tr->worked << "\n";
     for(int j=i-1; j>=0; --j) {
       TimeRecord* tr2=records[j];
@@ -97,14 +98,14 @@ void recalculate() {
       }
       break;
     }
-     if(tr->remaining>0) {
-        tr->billed=ceil(tr->remaining/1800.0);
-        tr->remaining -= tr->billed*1800;
-      }else
-      {
-        tr->billed=0;
-      }
-      // ts << "billed "<< tr->billed << " remaining "<< tr->remaining << "\n";
+    if(tr->remaining>0) {
+      tr->billed=ceil(tr->remaining/1800.0);
+      tr->remaining -= tr->billed*1800;
+    } else
+    {
+      tr->billed=0;
+    }
+    // ts << "billed "<< tr->billed << " remaining "<< tr->remaining << "\n";
   }
   timeOverview.clear();
   weekNumbers.clear();
@@ -115,7 +116,7 @@ void recalculate() {
     auto day=tr->start.date();
     int wn=day.weekNumber();
     auto prjs=timeOverview[wn];
-    if(prjs.isEmpty()){
+    if(prjs.isEmpty()) {
       qDebug()<< QString("appending week %1").arg(wn);
       weekNumbers.append(wn);
     }
