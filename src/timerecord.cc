@@ -64,9 +64,12 @@ int readRecords(QTextStream &ts) {
 }
 
 void recalculate() {
-  // QTextStream ts(stdout);
+  QTextStream ts(stdout);
   int sz=(int) records.size();
-  for(int i=0; i<sz; ++i) {
+  int stCalc=sz-50;
+  if(stCalc<0)
+    stCalc=0;
+  for(int i=stCalc; i<sz; ++i) {
     TimeRecord* tr=records[i];
     if(i+1<sz) {
       tr->worked=tr->start.secsTo(records[i+1]->start);
@@ -75,11 +78,10 @@ void recalculate() {
     else {
       auto now = QDateTime::currentDateTime();
       tr->worked=tr->start.secsTo(now);
-      tr->billed=0;
-      tr->remaining=0;
-      // ts << "working until now \n";
+      ts << "working until now \n";
     }
     tr->worked*=scale_up;
+    tr->remaining=tr->worked; //  will be reassigned if a previous record was found
     // ts << tr->start.toString(DATEFORMAT) << " "<< tr->project << " worked "<< tr->worked << "\n";
     for(int j=i-1; j>=0; --j) {
       TimeRecord* tr2=records[j];
@@ -105,7 +107,7 @@ void recalculate() {
     {
       tr->billed=0;
     }
-    // ts << "billed "<< tr->billed << " remaining "<< tr->remaining << "\n";
+    ts << "billed "<< tr->billed << " remaining "<< tr->remaining << "\n";
   }
   timeOverview.clear();
   weekNumbers.clear();

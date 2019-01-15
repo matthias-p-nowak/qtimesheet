@@ -50,10 +50,15 @@ EX_00_CM=./qtimesheet
 EX_00_WD=%pbuild
 
 [debugger]
-target=/home/me/projects/qtimesheet/build/qtimesheet
+target=/home/me/projects/qtimesheet/build/bin/qtimesheet
 debugger=GDB
 arguments=
 envvar_count=0
 watches_count=1
 watch_0=records
-breaks_count=0
+breaks_count=1
+break_0_file=/home/me/projects/qtimesheet/src/timerecord.cc
+break_0_line=68
+break_0_condition=
+break_0_hits_count=0
+break_0_enabled=true
