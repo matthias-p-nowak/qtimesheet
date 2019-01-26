@@ -176,7 +176,8 @@ void MainWindow::updateResults() {
   updateProjects();
   tree->clear();
   int w=0;
-  for(int wn: weekNumbers) {
+  for(auto wi=weekNumbers.rbegin(); wi!=weekNumbers.rend(); ++wi) {
+    int wn=*wi;
     if(++w>6)
       break;
     QStringList sl;
@@ -214,5 +215,38 @@ void MainWindow::updateResults() {
     ti->setExpanded(true);
   for(int i=0; i<8; ++i)
     tree->resizeColumnToContents(i);
+  if(!records.empty()) {
+    auto lastRecord=records.back();
+    auto name=lastRecord->project;
+    auto wn=lastRecord->start.date().weekNumber();
+    bool week[7];
+    for(int i=0;i<7;++i)
+      week[i]=false;
+    float billed=0;
+    for(auto ri=records.rbegin();ri!=records.rend();++ri){
+      auto rec=*ri;
+      if(rec->project.isEmpty())
+        continue;
+      auto day=rec->start.date();
+      if(wn!=day.weekNumber())
+        break;
+      auto d=day.dayOfWeek()-1;
+      week[d]=true;
+      billed+= rec->billed;
+    }
+    float days=0;
+    for(auto w: week)
+      if(w) days+=1.0;
+    float todo= days*16.0 - billed; // half hours
+    qDebug()<< "must work" << todo;
+    todo= todo*1800 + lastRecord->remaining;
+    todo /= scale_up;
+    auto now = QDateTime::currentDateTime();
+    auto stop=now.addSecs(todo);
+    auto stopTime=stop.time().toString("HH:mm:ss");
+    qDebug()<<"stop working at"<<stopTime;
+    auto title=QString("%1 [%2] %3").arg(qApp->applicationName()).arg(name).arg(stopTime);
+    setWindowTitle(title);
+  }
 }
 

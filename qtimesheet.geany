@@ -28,11 +28,9 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=2
-FILE_NAME_0=176;C++;0;EUTF-8;2;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Fqtimesheet.hh;0;2
-FILE_NAME_1=2962;C++;0;EUTF-8;2;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Fmainwindow.cc;0;2
-FILE_NAME_2=2472;C++;0;EUTF-8;0;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Ftimerecord.cc;0;2
-FILE_NAME_3=223;None;0;EUTF-8;2;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fbuild%2Ftt2.txt;0;2
+current_page=1
+FILE_NAME_0=208;C++;0;EUTF-8;0;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Ftimerecord.cc;0;2
+FILE_NAME_1=4793;C++;0;EUTF-8;0;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Fmainwindow.cc;0;2
 
 [VTE]
 last_dir=/home/me/projects/qtimesheet/src
@@ -46,7 +44,7 @@ CMakeFT_00_CM=cmake -Bbuild -H. -GNinja
 CMakeFT_00_WD=%p
 filetypes=CMake;
 EX_00_LB=_Execute
-EX_00_CM=./qtimesheet
+EX_00_CM=./bin/qtimesheet
 EX_00_WD=%pbuild
 
 [debugger]
@@ -57,8 +55,8 @@ envvar_count=0
 watches_count=1
 watch_0=records
 breaks_count=1
-break_0_file=/home/me/projects/qtimesheet/src/timerecord.cc
-break_0_line=68
+break_0_file=/home/me/projects/qtimesheet/src/mainwindow.cc
+break_0_line=219
 break_0_condition=
 break_0_hits_count=0
 break_0_enabled=true
