@@ -239,7 +239,7 @@ void MainWindow::updateResults() {
       if(w) days+=1.0;
     float todo= days*16.0 - billed; // half hours
     qDebug()<< "must work" << todo;
-    todo= todo*1800 + lastRecord->remaining;
+    todo= todo*1800 - lastRecord->remaining;
     todo /= scale_up;
     auto now = QDateTime::currentDateTime();
     auto stop=now.addSecs(todo);

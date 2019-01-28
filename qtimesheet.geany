@@ -28,9 +28,10 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
-FILE_NAME_0=208;C++;0;EUTF-8;0;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Ftimerecord.cc;0;2
-FILE_NAME_1=4793;C++;0;EUTF-8;0;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Fmainwindow.cc;0;2
+current_page=0
+FILE_NAME_0=6442;C++;0;EUTF-8;0;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Fmainwindow.cc;0;2
+FILE_NAME_1=2876;C++;0;EUTF-8;0;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Ftimerecord.cc;0;2
+FILE_NAME_2=0;C++;0;EUTF-8;0;1;1;%2Fhome%2Fme%2Fprojects%2Fqtimesheet%2Fsrc%2Ftimerecord.hh;0;2
 
 [VTE]
 last_dir=/home/me/projects/qtimesheet/src
@@ -54,9 +55,19 @@ arguments=
 envvar_count=0
 watches_count=1
 watch_0=records
-breaks_count=1
+breaks_count=3
 break_0_file=/home/me/projects/qtimesheet/src/mainwindow.cc
 break_0_line=219
 break_0_condition=
 break_0_hits_count=0
 break_0_enabled=true
+break_1_file=/home/me/projects/qtimesheet/src/mainwindow.cc
+break_1_line=240
+break_1_condition=
+break_1_hits_count=0
+break_1_enabled=true
+break_2_file=/home/me/projects/qtimesheet/src/timerecord.cc
+break_2_line=104
+break_2_condition=
+break_2_hits_count=0
+break_2_enabled=true
