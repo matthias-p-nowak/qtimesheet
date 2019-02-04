@@ -42,6 +42,7 @@ public slots:
 
 private slots:
   void initialize();
+  void startUpdate();
 };
 
 

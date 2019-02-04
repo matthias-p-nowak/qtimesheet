@@ -62,6 +62,9 @@ void MainWindow::initialize() {
 
 MainWindow::~MainWindow() {
   fromHere("gone");
+  if(trayIcon){
+    trayIcon->hide();
+  }
 }
 
 void MainWindow::sysTrayMenuActivated(QSystemTrayIcon::ActivationReason reason) {
@@ -91,6 +94,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 // actions can't call closeEvent
 void MainWindow::closeMain(bool _ignored) {
   fromHere("closing all windows");
+  if(trayIcon){
+    trayIcon->hide();
+  }
   qApp->quit();
 }
 
@@ -170,6 +176,10 @@ void MainWindow::nextProject(bool _ignored) {
   _rec.start();
 }
 
+void MainWindow::startUpdate(){
+  _rec.start();
+}
+
 void MainWindow::updateResults() {
   fromHere("writing to files");
   writeRecordsToFile();
@@ -240,13 +250,31 @@ void MainWindow::updateResults() {
     float todo= days*16.0 - billed; // half hours
     qDebug()<< "must work" << todo;
     todo= todo*1800 - lastRecord->remaining;
+    if(todo > 0){
     todo /= scale_up;
     auto now = QDateTime::currentDateTime();
     auto stop=now.addSecs(todo);
     auto stopTime=stop.time().toString("HH:mm:ss");
     qDebug()<<"stop working at"<<stopTime;
+    if(trayIcon){
+      auto msg=QString("go home at %1").arg(stopTime);
+      trayIcon->showMessage("daily work",msg);
+    }
     auto title=QString("%1 [%2] %3").arg(qApp->applicationName()).arg(name).arg(stopTime);
     setWindowTitle(title);
+    todo= - lastRecord->remaining;
+    if(todo>0){
+      todo /= scale_up;
+      todo+=2;
+      QTimer::singleShot(todo*1000, this, &MainWindow::startUpdate);
+    }
+    }else{
+      auto title=QString("%1 [%2] go home...").arg(qApp->applicationName()).arg(name);
+      setWindowTitle(title);
+      if(trayIcon){
+        trayIcon->showMessage("QTimesheet official statement","go home, you have worked enough");
+      }
+    }
   }
 }
 
