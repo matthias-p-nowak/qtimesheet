@@ -62,7 +62,7 @@ void MainWindow::initialize() {
 
 MainWindow::~MainWindow() {
   fromHere("gone");
-  if(trayIcon){
+  if(trayIcon) {
     trayIcon->hide();
   }
 }
@@ -80,6 +80,10 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   QSettings settings(this);
   settings.setValue("geometry", saveGeometry());
   settings.setValue("windowState",saveState());
+   if(trayIcon) {
+    trayIcon->hide();
+    trayIcon->deleteLater();
+  }
   QMainWindow::closeEvent(event);
 }
 
@@ -94,7 +98,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 // actions can't call closeEvent
 void MainWindow::closeMain(bool _ignored) {
   fromHere("closing all windows");
-  if(trayIcon){
+  if(trayIcon) {
     trayIcon->hide();
   }
   qApp->quit();
@@ -176,7 +180,7 @@ void MainWindow::nextProject(bool _ignored) {
   _rec.start();
 }
 
-void MainWindow::startUpdate(){
+void MainWindow::startUpdate() {
   _rec.start();
 }
 
@@ -230,10 +234,10 @@ void MainWindow::updateResults() {
     auto name=lastRecord->project;
     auto wn=lastRecord->start.date().weekNumber();
     bool week[7];
-    for(int i=0;i<7;++i)
+    for(int i=0; i<7; ++i)
       week[i]=false;
     float billed=0;
-    for(auto ri=records.rbegin();ri!=records.rend();++ri){
+    for(auto ri=records.rbegin(); ri!=records.rend(); ++ri) {
       auto rec=*ri;
       if(rec->project.isEmpty())
         continue;
@@ -250,30 +254,34 @@ void MainWindow::updateResults() {
     float todo= days*16.0 - billed; // half hours
     qDebug()<< "must work" << todo;
     todo= todo*1800 - lastRecord->remaining;
-    if(todo > 0){
-    todo /= scale_up;
-    auto now = QDateTime::currentDateTime();
-    auto stop=now.addSecs(todo);
-    auto stopTime=stop.time().toString("HH:mm:ss");
-    qDebug()<<"stop working at"<<stopTime;
-    if(trayIcon){
-      auto msg=QString("go home at %1").arg(stopTime);
-      trayIcon->showMessage("daily work",msg);
-    }
-    auto title=QString("%1 [%2] %3").arg(qApp->applicationName()).arg(name).arg(stopTime);
-    setWindowTitle(title);
-    todo= - lastRecord->remaining;
-    if(todo>0){
+    if(todo > 0) {
       todo /= scale_up;
-      todo+=2;
-      QTimer::singleShot(todo*1000, this, &MainWindow::startUpdate);
-    }
-    }else{
+      auto now = QDateTime::currentDateTime();
+      auto stop=now.addSecs(todo);
+      auto stopTime=stop.time().toString("HH:mm:ss");
+      qDebug()<<"stop working at"<<stopTime;
+      if(trayIcon) {
+        auto msg=QString("go home at %1").arg(stopTime);
+        trayIcon->showMessage("daily work",msg);
+      }
+      auto title=QString("%1 [%2] %3").arg(qApp->applicationName()).arg(name).arg(stopTime);
+      setWindowTitle(title);
+      todo= - lastRecord->remaining;
+      if(todo>0) {
+        todo /= scale_up;
+        todo+=2;
+        QTimer::singleShot(todo*1000, this, &MainWindow::startUpdate);
+      }
+    } else {
       auto title=QString("%1 [%2] go home...").arg(qApp->applicationName()).arg(name);
       setWindowTitle(title);
-      if(trayIcon){
+      if(trayIcon) {
         trayIcon->showMessage("QTimesheet official statement","go home, you have worked enough");
       }
+      todo=-lastRecord->remaining;
+      todo+=2;
+      if(todo>0)
+        QTimer::singleShot(todo*1000, this, &MainWindow::startUpdate);
     }
   }
 }
